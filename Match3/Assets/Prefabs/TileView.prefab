@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1107868840020352225}
   - component: {fileID: 6170743780499383785}
   - component: {fileID: 4484449902690802673}
+  - component: {fileID: -4127662072812916652}
   m_Layer: 0
   m_Name: TileView
   m_TagString: Untagged
@@ -98,3 +99,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sprite: {fileID: 6170743780499383785}
+--- !u!61 &-4127662072812916652
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3106562838203227072}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 4.27, y: 3.94}
+    newSize: {x: 4.27, y: 3.94}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 4.27, y: 3.94}
+  m_EdgeRadius: 0
