@@ -9,7 +9,7 @@ public class CreateController
     private Vector2[,] _gridSpawnPoints;
     private GridCreater _gridCreater;
     private TileFactory _tileFactory;
-    private TileView[,] _tilesViews = new TileView[GameData.GRID_X, GameData.GRID_Y];
+    private Tile[,] _tiles = new Tile[GameData.GRID_X, GameData.GRID_Y];
     private int _spriteCount;
 
 
@@ -34,25 +34,40 @@ public class CreateController
         }
 
     }
-
-    public TileView[,] GetTilesView()
+    public Vector2[,] GetGridSpawnpoint()
     {
-        return _tilesViews;
+        return _gridSpawnPoints;
     }
 
-    public bool ReplaseTile(List<Vector2Int> matchTiles)
+    public Tile[,] GetTiles()
     {
-        bool isMatch=false;
+        return _tiles;
+    }
+
+    public bool ReplaseTileOnStart(List<Vector2Int> matchTiles)
+    {
+        bool isMatch = false;
         foreach (var tileIndex in matchTiles)
         {
-            if (_tilesViews[tileIndex.y, tileIndex.x] != null)
+            if (_tiles[tileIndex.y, tileIndex.x] != null)
             {
                 isMatch = true;
-                _tilesViews[tileIndex.y, tileIndex.x].DestroyTile();
+                _tiles[tileIndex.y, tileIndex.x].View.DestroyTile();
                 CreateTile(tileIndex.x, tileIndex.y);
             }
         }
         return isMatch;
+    }
+    public void DectroyMatchTiles(List<Vector2Int> matchTiles)
+    {
+        foreach (var tileIndex in matchTiles)
+        {
+            if (_tiles[tileIndex.y, tileIndex.x] != null)
+            {
+                _tiles[tileIndex.y, tileIndex.x].View.DestroyTile();
+                _tiles[tileIndex.y, tileIndex.x] = null;
+            }
+        }
     }
     private void CreateTile(int x, int y)
     {
@@ -60,7 +75,7 @@ public class CreateController
         var tile = _tileFactory.CreateTile(_gridSpawnPoints[y, x], (TilesName)tileName);
         if (tile != null)
         {
-            _tilesViews[y, x] = tile.View;
+            _tiles[y, x] = tile;
         }
     }
     private void CreateGrid()
