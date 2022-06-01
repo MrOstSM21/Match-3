@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +10,6 @@ public enum TilesName
 }
 public class TileFactory
 {
-
     private readonly Dictionary<TilesName, Sprite> _sprites;
     private readonly TileView _prefab;
 
@@ -28,5 +26,4 @@ public class TileFactory
         var tile = new Tile(tileView);
         return tile;
     }
-
 }

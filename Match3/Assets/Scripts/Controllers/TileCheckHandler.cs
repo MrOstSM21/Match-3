@@ -4,13 +4,11 @@ using UnityEngine;
 public class TileCheckHandler
 {
     private Tile[,] _tiles;
-    private List<Vector2Int> _matchedTiles = new List<Vector2Int>();
-    private List<Vector2Int> _markedTiles = new List<Vector2Int>();
-    private List<Vector2Int> _emptyTiles = new List<Vector2Int>();
+    private List<Vector2Int> _matchedTilesIndex = new List<Vector2Int>();
+    private List<Vector2Int> _markedTilesIndex = new List<Vector2Int>();
 
     private GameData _gameData;
     private int _matchCount = 0;
-
 
     public TileCheckHandler(GameData gameData)
     {
@@ -19,7 +17,7 @@ public class TileCheckHandler
     public List<Vector2Int> CheckMatchGrid(Tile[,] tiles)
     {
         _tiles = tiles;
-        _matchedTiles.Clear();
+        _matchedTilesIndex.Clear();
 
         Vector2Int dirrectionLeft = new Vector2Int(-1, 0);
         Vector2Int dirrectionRight = new Vector2Int(1, 0);
@@ -41,46 +39,61 @@ public class TileCheckHandler
             }
         }
         AddMatchedTile();
-        return _matchedTiles;
+        return _matchedTilesIndex;
     }
     public List<Vector2Int> CheckMarked(Tile[,] tiles)
     {
-        _markedTiles.Clear();
+        _markedTilesIndex.Clear();
         for (int y = 0; y < GameData.GRID_X; y++)
         {
             for (int x = 0; x < GameData.GRID_Y; x++)
             {
                 if (tiles[y, x].GetIsMark())
                 {
-                    _markedTiles.Add(new Vector2Int(x, y));
+                    _markedTilesIndex.Add(new Vector2Int(x, y));
                 }
             }
         }
 
-        if (_markedTiles.Count == 2 && CheckPositionMarked(_markedTiles))
+        if (_markedTilesIndex.Count == 2 && CheckPositionMarked(_markedTilesIndex))
         {
-            return _markedTiles;
+            return _markedTilesIndex;
         }
         return new List<Vector2Int>();
 
     }
-    public void CheckEmptyPoints(Tile[,] tiles)
+    public List<Vector2Int> FindMovingDownTiles(Tile[,] tiles)
     {
+        List<Vector2Int> movingDownTilesIndex = new List<Vector2Int>();
         for (int y = 0; y < GameData.GRID_X; y++)
         {
             for (int x = 0; x < GameData.GRID_Y; x++)
             {
                 if (tiles[y, x] == null && x + 1 < GameData.GRID_Y && tiles[y, x + 1] != null)
                 {
-                    _emptyTiles.Add(new Vector2Int(x, y));
+                    movingDownTilesIndex.Add(new Vector2Int(x + 1, y));
                 }
             }
         }
+        return movingDownTilesIndex;
     }
-
+    public List<Vector2Int> FindTopEmptyTiles(Tile[,] tiles)
+    {
+        List<Vector2Int> topEmptyTilesIndex = new List<Vector2Int>();
+        for (int y = 0; y < GameData.GRID_X; y++)
+        {
+            for (int x = 0; x < GameData.GRID_Y; x++)
+            {
+                if (tiles[y, x] == null && x == GameData.GRID_Y - 1)
+                {
+                    topEmptyTilesIndex.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+        return topEmptyTilesIndex;
+    }
     private void CheckMatch(int x, int y, int xOffset, int yOffset)
     {
-
         if (CheckIndex(x, GameData.GRID_Y, xOffset) && CheckIndex(y, GameData.GRID_X, yOffset))
         {
             if (_tiles[y, x].TilesName == _tiles[y + yOffset, x + xOffset].TilesName)
@@ -94,7 +107,6 @@ public class TileCheckHandler
 
                 }
             }
-
             return;
         }
         else
@@ -118,7 +130,7 @@ public class TileCheckHandler
             {
                 if (_tiles[y, x]._isMatch)
                 {
-                    _matchedTiles.Add(new Vector2Int(x, y));
+                    _matchedTilesIndex.Add(new Vector2Int(x, y));
                 }
             }
         }
