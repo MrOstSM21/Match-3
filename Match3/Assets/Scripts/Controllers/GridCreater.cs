@@ -1,12 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GridCreater
 {
     private GameData _gameData;
     private Vector2[,] _spawnPoint;
-
 
     public GridCreater(GameData gameData)
     {

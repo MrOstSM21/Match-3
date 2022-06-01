@@ -1,14 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class GameController
 {
     private CreateController _createController;
     private TileCheckHandler _checkHandler;
     private TileMove _tileMove;
-
-
 
     public GameController(GameData gameData, TileSpritesView tileSpritesView, TileView tileView)
     {
@@ -17,7 +12,6 @@ public class GameController
         _createController.Init();
         _tileMove = new TileMove(_createController.GetGridSpawnpoint());
         CheckMatchOnStart();
-
     }
 
     public void ChangePositionMarked()
@@ -26,13 +20,41 @@ public class GameController
         if (marked != null)
         {
             _tileMove.ChangePosition(_createController.GetTiles(), marked);
-            
+
         }
-        ReplaceMatched();
+        ReplaceEmpty();
     }
-    private void ReplaceMatched()
+    private void ReplaceEmpty()
     {
-        _createController.DectroyMatchTiles(_checkHandler.CheckMatchGrid(_createController.GetTiles()));
+        while (true)
+        {
+            var destroyd = _createController.DectroyMatchedTiles(_checkHandler.CheckMatchGrid(_createController.GetTiles()));
+            if (!destroyd)
+            {
+                return;
+            }
+            FillEmpty();
+        }
+    }
+    private void FillEmpty()
+    {
+        while (true)
+        {
+            while (true)
+            {
+                if (!_tileMove.MoveTileDown(_createController.GetTiles(), _checkHandler.FindMovingDownTiles(_createController.GetTiles())))
+                {
+                    break;
+                }
+            }
+            var topEmptyTilesIndex = _checkHandler.FindTopEmptyTiles(_createController.GetTiles());
+            if (topEmptyTilesIndex.Count == 0)
+            {
+                return;
+            }
+            _tileMove.MoveDownNewTile(_createController.CreateTileOutOfScreen(topEmptyTilesIndex), topEmptyTilesIndex, _createController.GetTiles());
+        }
+
     }
     private void CheckMatchOnStart()
     {
@@ -44,5 +66,4 @@ public class GameController
             }
         }
     }
-
 }
