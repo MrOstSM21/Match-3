@@ -1,17 +1,14 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CreateController
 {
-
     private GameData _gameData;
     private Vector2[,] _gridSpawnPoints;
     private GridCreater _gridCreater;
     private TileFactory _tileFactory;
     private Tile[,] _tiles = new Tile[GameData.GRID_X, GameData.GRID_Y];
     private int _spriteCount;
-
 
     public CreateController(GameData gameData, TileSpritesView tileSpritesView, TileView tileView)
     {
@@ -29,21 +26,33 @@ public class CreateController
         {
             for (int x = 0; x < GameData.GRID_Y; x++)
             {
-                CreateTile(x, y);
+                CreateTileOnStart(x, y);
             }
         }
-
     }
     public Vector2[,] GetGridSpawnpoint()
     {
         return _gridSpawnPoints;
     }
-
     public Tile[,] GetTiles()
     {
         return _tiles;
     }
-
+    public List<Tile> CreateTileOutOfScreen(List<Vector2Int> topEmptyTiles)
+    {
+        List<Tile> tilesOutOfScreen = new List<Tile>();
+        foreach (var item in topEmptyTiles)
+        {
+            if (item != null)
+            {
+                var positionEmpty = _gridSpawnPoints[item.y, item.x];
+                var positionY = positionEmpty.y + _gameData.PrefabSize.y + _gameData.Offset;
+                var tileOutOfScreen = CreateTile(new Vector2(positionEmpty.x, positionY));
+                tilesOutOfScreen.Add(tileOutOfScreen);
+            }
+        }
+        return tilesOutOfScreen;
+    }
     public bool ReplaseTileOnStart(List<Vector2Int> matchTiles)
     {
         bool isMatch = false;
@@ -53,30 +62,38 @@ public class CreateController
             {
                 isMatch = true;
                 _tiles[tileIndex.y, tileIndex.x].View.DestroyTile();
-                CreateTile(tileIndex.x, tileIndex.y);
+                CreateTileOnStart(tileIndex.x, tileIndex.y);
             }
         }
         return isMatch;
     }
-    public void DectroyMatchTiles(List<Vector2Int> matchTiles)
+    public bool DectroyMatchedTiles(List<Vector2Int> matchTiles)
     {
+        bool isMatch = false;
         foreach (var tileIndex in matchTiles)
         {
             if (_tiles[tileIndex.y, tileIndex.x] != null)
             {
                 _tiles[tileIndex.y, tileIndex.x].View.DestroyTile();
                 _tiles[tileIndex.y, tileIndex.x] = null;
+                isMatch = true;
             }
         }
+        return isMatch;
     }
-    private void CreateTile(int x, int y)
+    private void CreateTileOnStart(int x, int y)
     {
-        var tileName = Random.Range(0, _spriteCount);
-        var tile = _tileFactory.CreateTile(_gridSpawnPoints[y, x], (TilesName)tileName);
+        var tile = CreateTile(_gridSpawnPoints[y, x]);
         if (tile != null)
         {
             _tiles[y, x] = tile;
         }
+    }
+    private Tile CreateTile(Vector2 tilePossition)
+    {
+        var tileName = Random.Range(0, _spriteCount);
+        var tile = _tileFactory.CreateTile(tilePossition, (TilesName)tileName);
+        return tile;
     }
     private void CreateGrid()
     {
