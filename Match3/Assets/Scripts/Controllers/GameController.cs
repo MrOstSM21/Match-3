@@ -1,13 +1,13 @@
 
 public class GameController
 {
-    private CreateController _createController;
-    private TileCheckHandler _checkHandler;
-    private TileMove _tileMove;
+    private readonly CreateController _createController;
+    private readonly TileCheckHandler _checkHandler;
+    private readonly TileMove _tileMove;
 
-    public GameController(GameData gameData, TileSpritesView tileSpritesView, TileView tileView)
+    public GameController(GameData gameData, TileSpritesView tileSpritesView, TileView tileView, ScoreView scoreView)
     {
-        _createController = new CreateController(gameData, tileSpritesView, tileView);
+        _createController = new CreateController(gameData, tileSpritesView, tileView, scoreView);
         _checkHandler = new TileCheckHandler(gameData);
         _createController.Init();
         _tileMove = new TileMove(_createController.GetGridSpawnpoint());

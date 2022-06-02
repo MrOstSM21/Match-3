@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class TileMove
 {
-    private Vector2[,] _tilesPosition;
+    private readonly Vector2[,] _tilesPosition;
     private Tile tempTile;
     private Vector2Int tempindex;
     private int count = 0;
