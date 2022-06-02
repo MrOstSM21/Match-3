@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class GridCreater
 {
-    private GameData _gameData;
+    private readonly GameData _gameData;
     private Vector2[,] _spawnPoint;
 
     public GridCreater(GameData gameData)

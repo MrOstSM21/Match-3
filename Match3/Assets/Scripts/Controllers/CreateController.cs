@@ -3,20 +3,21 @@ using UnityEngine;
 
 public class CreateController
 {
-    private GameData _gameData;
+    private readonly GameData _gameData;
+    private readonly GridCreater _gridCreater;
+
     private Vector2[,] _gridSpawnPoints;
-    private GridCreater _gridCreater;
     private TileFactory _tileFactory;
     private Tile[,] _tiles = new Tile[GameData.GRID_X, GameData.GRID_Y];
     private int _spriteCount;
 
-    public CreateController(GameData gameData, TileSpritesView tileSpritesView, TileView tileView)
+    public CreateController(GameData gameData, TileSpritesView tileSpritesView, TileView tileView, ScoreView scoreView)
     {
         _gameData = gameData;
         _gridCreater = new GridCreater(_gameData);
         var sprites = tileSpritesView.GetSprites();
         _spriteCount = sprites.Count;
-        _tileFactory = new TileFactory(sprites, tileView);
+        _tileFactory = new TileFactory(sprites, tileView, scoreView, _gameData);
     }
 
     public void Init()
@@ -61,7 +62,7 @@ public class CreateController
             if (_tiles[tileIndex.y, tileIndex.x] != null)
             {
                 isMatch = true;
-                _tiles[tileIndex.y, tileIndex.x].View.DestroyTile();
+                _tiles[tileIndex.y, tileIndex.x].View.DestroyTile(true);
                 CreateTileOnStart(tileIndex.x, tileIndex.y);
             }
         }
@@ -74,7 +75,7 @@ public class CreateController
         {
             if (_tiles[tileIndex.y, tileIndex.x] != null)
             {
-                _tiles[tileIndex.y, tileIndex.x].View.DestroyTile();
+                _tiles[tileIndex.y, tileIndex.x].View.DestroyTile(false);
                 _tiles[tileIndex.y, tileIndex.x] = null;
                 isMatch = true;
             }

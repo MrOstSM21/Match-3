@@ -4,6 +4,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private TileSpritesView _tileSprites;
     [SerializeField] private TileView _tilePrefab;
+    [SerializeField] private ScoreView _scoreView;
 
     private GameController _gameController;
     private int _countPush = 0;
@@ -12,7 +13,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         _gameData = new GameData();
-        _gameController = new GameController(_gameData, _tileSprites, _tilePrefab);
+        _gameController = new GameController(_gameData, _tileSprites, _tilePrefab, _scoreView);
     }
     private void Update()
     {
@@ -21,7 +22,6 @@ public class GameManager : MonoBehaviour
             _countPush++;
             if (_countPush == 2)
             {
-                Debug.Log(" push 2 count, start check");
                 _gameController.ChangePositionMarked();
                 _countPush = 0;
             }

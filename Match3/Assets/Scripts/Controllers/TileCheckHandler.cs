@@ -3,11 +3,9 @@ using UnityEngine;
 
 public class TileCheckHandler
 {
-    private Tile[,] _tiles;
-    private List<Vector2Int> _matchedTilesIndex = new List<Vector2Int>();
-    private List<Vector2Int> _markedTilesIndex = new List<Vector2Int>();
+    private readonly GameData _gameData;
 
-    private GameData _gameData;
+    private Tile[,] _tiles;
     private int _matchCount = 0;
 
     public TileCheckHandler(GameData gameData)
@@ -17,7 +15,7 @@ public class TileCheckHandler
     public List<Vector2Int> CheckMatchGrid(Tile[,] tiles)
     {
         _tiles = tiles;
-        _matchedTilesIndex.Clear();
+        List<Vector2Int> _matchedTilesIndex = new List<Vector2Int>();
 
         Vector2Int dirrectionLeft = new Vector2Int(-1, 0);
         Vector2Int dirrectionRight = new Vector2Int(1, 0);
@@ -38,17 +36,18 @@ public class TileCheckHandler
                 ResetMatchCount();
             }
         }
-        AddMatchedTile();
+        AddMatchedTile(_matchedTilesIndex);
         return _matchedTilesIndex;
     }
     public List<Vector2Int> CheckMarked(Tile[,] tiles)
     {
-        _markedTilesIndex.Clear();
+        List<Vector2Int> _markedTilesIndex = new List<Vector2Int>();
+
         for (int y = 0; y < GameData.GRID_X; y++)
         {
             for (int x = 0; x < GameData.GRID_Y; x++)
             {
-                if (tiles[y, x].GetIsMark())
+                if (tiles[y, x]._isMark)
                 {
                     _markedTilesIndex.Add(new Vector2Int(x, y));
                 }
@@ -58,6 +57,16 @@ public class TileCheckHandler
         if (_markedTilesIndex.Count == 2 && CheckPositionMarked(_markedTilesIndex))
         {
             return _markedTilesIndex;
+        }
+        else
+        {
+            foreach (var item in _markedTilesIndex)
+            {
+                if (item != null)
+                {
+                    tiles[item.y, item.x]._isMark = false;
+                }
+            }
         }
         return new List<Vector2Int>();
 
@@ -122,7 +131,7 @@ public class TileCheckHandler
         }
         return false;
     }
-    private void AddMatchedTile()
+    private void AddMatchedTile(List<Vector2Int> matchedTilesIndex)
     {
         for (int y = 0; y < GameData.GRID_X; y++)
         {
@@ -130,7 +139,7 @@ public class TileCheckHandler
             {
                 if (_tiles[y, x]._isMatch)
                 {
-                    _matchedTilesIndex.Add(new Vector2Int(x, y));
+                    matchedTilesIndex.Add(new Vector2Int(x, y));
                 }
             }
         }
