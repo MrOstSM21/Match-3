@@ -4,9 +4,12 @@ using UnityEngine;
 public class TileMove
 {
     private readonly Vector2[,] _tilesPosition;
-    private Tile tempTile;
-    private Vector2Int tempindex;
+    private Tile _firstTile;
+    private Tile _secondTile;
+    private Vector2Int _firstTileindex;
     private int count = 0;
+    private List<Vector2Int> _indexMovedTiles = new List<Vector2Int>();
+    
 
     public TileMove(Vector2[,] tilesPosition)
     {
@@ -14,25 +17,51 @@ public class TileMove
     }
     public void ChangePosition(Tile[,] tiles, List<Vector2Int> indexMarked)
     {
-        foreach (var item in indexMarked)
+        for (int i = 0; i < 2; i++)
         {
-            if (count == 0)
+            if (i == 0)
             {
-                tempindex = item;
-                tempTile = tiles[item.y, item.x];
+                _firstTileindex = indexMarked[0];
+                _firstTile = tiles[indexMarked[0].y, indexMarked[0].x];
                 count++;
             }
             else
             {
-                tiles[item.y, item.x].SetPosition(_tilesPosition[tempindex.y, tempindex.x]);
-                tempTile.SetPosition(_tilesPosition[item.y, item.x]);
-                Tile temp = tiles[item.y, item.x];
-                tiles[item.y, item.x] = tiles[tempindex.y, tempindex.x];
-                tiles[tempindex.y, tempindex.x] = temp;
+                var secondTileIndex = indexMarked[1];
+                tiles[secondTileIndex.y, secondTileIndex.x].SetTileViewSwap(_tilesPosition[_firstTileindex.y, _firstTileindex.x]);
+                _firstTile.SetTileViewSwap(_tilesPosition[secondTileIndex.y, secondTileIndex.x]);
+                _secondTile = tiles[secondTileIndex.y, secondTileIndex.x];
+                tiles[secondTileIndex.y, secondTileIndex.x] = tiles[_firstTileindex.y, _firstTileindex.x];
+                tiles[_firstTileindex.y, _firstTileindex.x] = _secondTile;
                 count = 0;
+                RememberTilesMoved(new Vector2Int(secondTileIndex.x, secondTileIndex.y), new Vector2Int(_firstTileindex.x, _firstTileindex.y));
+
             }
         }
+        //foreach (var item in indexMarked)
+        //{
+        //    if (count == 0)
+        //    {
+        //        _firstTileindex = item;
+        //        _firstTile = tiles[item.y, item.x];
+        //        count++;
+        //    }
+        //    else
+        //    {
+        //        var secondTileIndex = item;
+        //        tiles[secondTileIndex.y, secondTileIndex.x].SetTileViewSwap(_tilesPosition[_firstTileindex.y, _firstTileindex.x]);
+        //        _firstTile.SetTileViewSwap(_tilesPosition[secondTileIndex.y, secondTileIndex.x]);
+        //        _secondTile = tiles[secondTileIndex.y, secondTileIndex.x];
+        //        tiles[secondTileIndex.y, secondTileIndex.x] = tiles[_firstTileindex.y, _firstTileindex.x];
+        //        tiles[_firstTileindex.y, _firstTileindex.x] = _secondTile;
+        //        count = 0;
+        //        RememberTilesMoved(new Vector2Int(secondTileIndex.x, secondTileIndex.y),new Vector2Int(_firstTileindex.x, _firstTileindex.y));
+               
+        //    }
+        //}
     }
+
+  
     public bool MoveTileDown(Tile[,] tiles, List<Vector2Int> movingDownTiles)
     {
         bool isMatched = false;
@@ -40,7 +69,7 @@ public class TileMove
         {
             if (item != null)
             {
-                tiles[item.y, item.x].SetPosition(_tilesPosition[item.y, item.x - 1]);
+                tiles[item.y, item.x].SetTileViewMove(_tilesPosition[item.y, item.x - 1]);
                 tiles[item.y, item.x - 1] = tiles[item.y, item.x];
                 tiles[item.y, item.x] = null;
                 isMatched = true;
@@ -55,9 +84,21 @@ public class TileMove
             for (int index = 0; index < newTile.Count; index++)
             {
                 var position = _tilesPosition[topEmptyTilesIndex[index].y, topEmptyTilesIndex[index].x];
-                newTile[index].SetPosition(new Vector2(position.x, position.y));
+                newTile[index].SetTileViewMove(new Vector2(position.x, position.y));
                 tile[topEmptyTilesIndex[index].y, topEmptyTilesIndex[index].x] = newTile[index];
             }
         }
     }
+    public List<Vector2Int> GetRememberSwapTiles()
+    {
+        return _indexMovedTiles;
+    }
+    private void RememberTilesMoved(Vector2Int firstIndex, Vector2Int secondIndex)
+    {
+        _indexMovedTiles.Clear();
+        _indexMovedTiles.Add(firstIndex);
+        _indexMovedTiles.Add(secondIndex);
+    }
+    
 }
+

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Collections;
 
 public class TileView : MonoBehaviour
 {
@@ -8,15 +9,21 @@ public class TileView : MonoBehaviour
 
     [SerializeField] SpriteRenderer _sprite;
 
-    private bool _move;
-    private Vector2 _position;
+    private bool _isMove;
+    private Vector3 _position;
+    private float _speed;
     public TilesName TilesName { get; private set; }
 
     private void Update()
     {
-        if (_move)
+        if (_isMove)
         {
-            transform.position = Vector2.MoveTowards(transform.position, _position, 0.04f);
+            transform.position = Vector2.MoveTowards (transform.position, _position, _speed);
+
+            if (transform.position == _position)
+            {
+                _isMove = false;
+            }
         }
     }
     public void Init(Sprite sprite, TilesName tilesName)
@@ -34,12 +41,19 @@ public class TileView : MonoBehaviour
         {
             IsDestroy?.Invoke();
         }
-        
+
         Destroy(gameObject);
     }
-    public void SetPosition(Vector2 position, bool move)
+    public void SetPosition(Vector2 position, bool move, float speed)
     {
-        _move = move;
+        _speed = speed;
+        _isMove = move;
         _position = position;
+
     }
+    public bool GetIsMove()
+    {
+        return _isMove;
+    }
+
 }

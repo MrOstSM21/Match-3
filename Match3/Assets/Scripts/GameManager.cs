@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     }
     private void Update()
     {
+        _gameController.HandleState();
         if (Input.GetMouseButtonDown(0))
         {
             _countPush++;
