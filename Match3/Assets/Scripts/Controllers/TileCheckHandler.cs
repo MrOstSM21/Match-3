@@ -47,7 +47,7 @@ public class TileCheckHandler
         {
             for (int x = 0; x < GameData.GRID_Y; x++)
             {
-                if (tiles[y, x]._isMark)
+                if (tiles[y, x].GetIsMark())
                 {
                     _markedTilesIndex.Add(new Vector2Int(x, y));
                 }
@@ -64,7 +64,7 @@ public class TileCheckHandler
             {
                 if (item != null)
                 {
-                    tiles[item.y, item.x]._isMark = false;
+                    tiles[item.y, item.x].tileView_IsPushed();
                 }
             }
         }
@@ -74,9 +74,9 @@ public class TileCheckHandler
     public List<Vector2Int> FindMovingDownTiles(Tile[,] tiles)
     {
         List<Vector2Int> movingDownTilesIndex = new List<Vector2Int>();
-        for (int y = 0; y < GameData.GRID_X; y++)
+        for (int x = 0; x < GameData.GRID_Y; x++)
         {
-            for (int x = 0; x < GameData.GRID_Y; x++)
+            for (int y = 0; y < GameData.GRID_X; y++)
             {
                 if (tiles[y, x] == null && x + 1 < GameData.GRID_Y && tiles[y, x + 1] != null)
                 {
@@ -101,6 +101,23 @@ public class TileCheckHandler
         }
         return topEmptyTilesIndex;
     }
+    public bool CheckTilesIsMove( Tile[,] tiles)
+    {
+        bool isMove = false;
+        foreach (var item in tiles)
+        {
+            if (item != null)
+            {
+                if (item.GetTileViewIsMove())
+                {
+                    isMove = true;
+                    return isMove;
+                }
+            }
+           
+        }
+        return isMove;
+    }
     private void CheckMatch(int x, int y, int xOffset, int yOffset)
     {
         if (CheckIndex(x, GameData.GRID_Y, xOffset) && CheckIndex(y, GameData.GRID_X, yOffset))
@@ -112,15 +129,9 @@ public class TileCheckHandler
                 CheckMatch(x + xOffset, y + yOffset, xOffset, yOffset);
                 if (_matchCount >= _gameData.TileOverlap)
                 {
-                    _tiles[y, x]._isMatch = true;
-
+                    _tiles[y, x].ChangeIsMatch();
                 }
             }
-            return;
-        }
-        else
-        {
-            return;
         }
     }
     private bool CheckIndex(int index, int gridDirrectionLenght, int offset)
@@ -137,7 +148,7 @@ public class TileCheckHandler
         {
             for (int x = 0; x < GameData.GRID_Y; x++)
             {
-                if (_tiles[y, x]._isMatch)
+                if (_tiles[y, x].GetIsMatch())
                 {
                     matchedTilesIndex.Add(new Vector2Int(x, y));
                 }

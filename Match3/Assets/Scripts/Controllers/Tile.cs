@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class Tile
 {
-    public bool _isMatch = false;
-    public bool _isMark = false;
+    private bool _isMatch = false;
+    private bool _isMark = false;
 
     public TilesName TilesName { get { return _tileView.TilesName; } }
     public TileView View { get { return _tileView; } }
@@ -22,13 +22,24 @@ public class Tile
 
     }
 
-    public void SetPosition(Vector2 position)
+    public void SetTileViewSwap(Vector2 position)
     {
-        _tileView.SetPosition(position, true);
+        _tileView.SetPosition(position, true,_gameData.SwapTileSpeed);
+        _isMark = false;
+    }public void SetTileViewMove(Vector2 position)
+    {
+        _tileView.SetPosition(position, true,_gameData.MoveTileSpeed);
         _isMark = false;
     }
-
-    private void tileView_IsPushed()
+    public void ChangeIsMatch()
+    {
+        _isMatch = true;
+    }
+    public bool GetIsMatch()
+    {
+        return _isMatch;
+    }
+    public void tileView_IsPushed()
     {
 
         if (_isMark)
@@ -39,6 +50,15 @@ public class Tile
         {
             _isMark = true;
         }
+        
+    }
+    public bool GetIsMark()
+    {
+        return _isMark;
+    }
+    public  bool GetTileViewIsMove()
+    {
+        return _tileView.GetIsMove();
     }
     private void tileView_IsDestroy()
     {
