@@ -9,16 +9,19 @@ public class TileView : MonoBehaviour
 
     [SerializeField] SpriteRenderer _sprite;
 
+    public TilesName TilesName { get; private set; }
+    public bool GetIsMove { get { return _isMove; } }
+
     private bool _isMove;
     private Vector3 _position;
     private float _speed;
-    public TilesName TilesName { get; private set; }
+
 
     private void Update()
     {
         if (_isMove)
         {
-            transform.position = Vector2.MoveTowards (transform.position, _position, _speed);
+            transform.position = Vector2.MoveTowards(transform.position, _position, _speed);
 
             if (transform.position == _position)
             {
@@ -51,9 +54,4 @@ public class TileView : MonoBehaviour
         _position = position;
 
     }
-    public bool GetIsMove()
-    {
-        return _isMove;
-    }
-
 }

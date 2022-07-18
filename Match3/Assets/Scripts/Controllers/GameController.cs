@@ -21,13 +21,14 @@ public class GameController
     private readonly CreateController _createController;
     private readonly TileCheckHandler _checkHandler;
     private readonly TileMove _tileMove;
-    private ControllerState _state;
+
+    private List<Vector2Int> _movingDownTiles;
     private List<Vector2Int> _markedTiles;
     private List<Vector2Int> _matchedTiles;
-    private bool _loop = false;
-    private List<Vector2Int> _movingDownTiles;
-    private bool _isMoved;
+    private ControllerState _state;
     private Tile[,] _tiles;
+    private bool _loop = false;
+    private bool _isMoved;
     private bool _tilesExchange;
 
     public GameController(GameData gameData, TileSpritesView tileSpritesView, TileView tileView, ScoreView scoreView)
@@ -35,7 +36,7 @@ public class GameController
         _createController = new CreateController(gameData, tileSpritesView, tileView, scoreView);
         _checkHandler = new TileCheckHandler(gameData);
         _createController.Init();
-        _tileMove = new TileMove(_createController.GetGridSpawnpoint());
+        _tileMove = new TileMove(_createController.GetGridSpawnpoint);
         _state = ControllerState.CheckMatchOnStart;
         HandleState();
     }
@@ -44,13 +45,17 @@ public class GameController
         _state = ControllerState.CheckMarked;
     }
 
-    public void HandleState()
+    public void Init()
+    {
+        HandleState();
+    }
+    private void HandleState()
     {
         switch (_state)
         {
             case ControllerState.CheckMatchOnStart:
 
-                var foundMatches = _checkHandler.CheckMatchGrid(_createController.GetTiles());
+                var foundMatches = _checkHandler.CheckMatchGrid(_createController.GetTiles);
                 if (!_createController.ReplaseTileOnStart(foundMatches))
                 {
                     _state = ControllerState.Wait;
@@ -60,7 +65,7 @@ public class GameController
 
             case ControllerState.CheckMarked:
 
-                _markedTiles = _checkHandler.CheckMarked(_createController.GetTiles());
+                _markedTiles = _checkHandler.CheckMarked(_createController.GetTiles);
                 if (_markedTiles.Count != 0)
                     _state = ControllerState.ChangePositionMarkedTiles;
                 else
@@ -72,16 +77,16 @@ public class GameController
 
                 if (!_loop)
                 {
-                    _tileMove.ChangePosition(_createController.GetTiles(), _markedTiles);
+                    _tileMove.ChangePosition(_createController.GetTiles, _markedTiles);
                     _tilesExchange = true;
                 }
-                CheckTileIsMove(_createController.GetTiles(), ControllerState.CheckMatch, ControllerState.ChangePositionMarkedTiles);
+                CheckTileIsMove(_createController.GetTiles, ControllerState.CheckMatch, ControllerState.ChangePositionMarkedTiles);
 
                 break;
 
             case ControllerState.CheckMatch:
 
-                _matchedTiles = _checkHandler.CheckMatchGrid(_createController.GetTiles());
+                _matchedTiles = _checkHandler.CheckMatchGrid(_createController.GetTiles);
                 if (_matchedTiles.Count != 0)
                 {
 
@@ -98,14 +103,14 @@ public class GameController
                     _state = ControllerState.Wait;
 
                 break;
-            
+
             case ControllerState.ChangePositionMarkedTilesBack:
 
                 if (!_loop)
                 {
-                    _tileMove.ChangePosition(_createController.GetTiles(),_tileMove.GetRememberSwapTiles());
+                    _tileMove.ChangePosition(_createController.GetTiles, _tileMove.GetRememberSwapTiles);
                 }
-                CheckTileIsMove(_createController.GetTiles(), ControllerState.CheckMatch, ControllerState.ChangePositionMarkedTilesBack);
+                CheckTileIsMove(_createController.GetTiles, ControllerState.CheckMatch, ControllerState.ChangePositionMarkedTilesBack);
 
                 break;
 
@@ -123,8 +128,8 @@ public class GameController
 
                 if (!_loop)
                 {
-                    _movingDownTiles = _checkHandler.FindMovingDownTiles(_createController.GetTiles());
-                    _tiles = _createController.GetTiles();
+                    _movingDownTiles = _checkHandler.FindMovingDownTiles(_createController.GetTiles);
+                    _tiles = _createController.GetTiles;
                     _isMoved = _tileMove.MoveTileDown(_tiles, _movingDownTiles);
                 }
                 CheckTileIsMoveDown(_tiles, ControllerState.FillTopEmptyTiles, ControllerState.MoveTileDown);
@@ -133,7 +138,7 @@ public class GameController
 
             case ControllerState.FillTopEmptyTiles:
 
-                var topEmptyTilesIndex = _checkHandler.FindTopEmptyTiles(_createController.GetTiles());
+                var topEmptyTilesIndex = _checkHandler.FindTopEmptyTiles(_createController.GetTiles);
                 if (topEmptyTilesIndex.Count == 0)
                 {
                     _state = ControllerState.CheckMatch;
@@ -141,7 +146,7 @@ public class GameController
                 else
                 {
                     var tileOutOfScreen = _createController.CreateTileOutOfScreen(topEmptyTilesIndex);
-                    _tileMove.MoveDownNewTile(tileOutOfScreen, topEmptyTilesIndex, _createController.GetTiles());
+                    _tileMove.MoveDownNewTile(tileOutOfScreen, topEmptyTilesIndex, _createController.GetTiles);
                     _state = ControllerState.MoveTileDown;
                 }
 

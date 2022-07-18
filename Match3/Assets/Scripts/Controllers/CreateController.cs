@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class CreateController
 {
+    public Vector2[,] GetGridSpawnpoint { get { return _gridSpawnPoints; } }
+    public Tile[,] GetTiles { get { return _tiles; } }
+
     private readonly GameData _gameData;
     private readonly GridCreater _gridCreater;
 
@@ -31,14 +34,7 @@ public class CreateController
             }
         }
     }
-    public Vector2[,] GetGridSpawnpoint()
-    {
-        return _gridSpawnPoints;
-    }
-    public Tile[,] GetTiles()
-    {
-        return _tiles;
-    }
+   
     public List<Tile> CreateTileOutOfScreen(List<Vector2Int> topEmptyTiles)
     {
         List<Tile> tilesOutOfScreen = new List<Tile>();

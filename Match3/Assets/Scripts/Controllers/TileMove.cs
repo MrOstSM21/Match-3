@@ -3,13 +3,15 @@ using UnityEngine;
 
 public class TileMove
 {
+    public List<Vector2Int> GetRememberSwapTiles { get { return _indexMovedTiles; } }
+
     private readonly Vector2[,] _tilesPosition;
+
+    private List<Vector2Int> _indexMovedTiles = new List<Vector2Int>();
+    private Vector2Int _firstTileindex;
     private Tile _firstTile;
     private Tile _secondTile;
-    private Vector2Int _firstTileindex;
     private int count = 0;
-    private List<Vector2Int> _indexMovedTiles = new List<Vector2Int>();
-    
 
     public TileMove(Vector2[,] tilesPosition)
     {
@@ -38,30 +40,9 @@ public class TileMove
 
             }
         }
-        //foreach (var item in indexMarked)
-        //{
-        //    if (count == 0)
-        //    {
-        //        _firstTileindex = item;
-        //        _firstTile = tiles[item.y, item.x];
-        //        count++;
-        //    }
-        //    else
-        //    {
-        //        var secondTileIndex = item;
-        //        tiles[secondTileIndex.y, secondTileIndex.x].SetTileViewSwap(_tilesPosition[_firstTileindex.y, _firstTileindex.x]);
-        //        _firstTile.SetTileViewSwap(_tilesPosition[secondTileIndex.y, secondTileIndex.x]);
-        //        _secondTile = tiles[secondTileIndex.y, secondTileIndex.x];
-        //        tiles[secondTileIndex.y, secondTileIndex.x] = tiles[_firstTileindex.y, _firstTileindex.x];
-        //        tiles[_firstTileindex.y, _firstTileindex.x] = _secondTile;
-        //        count = 0;
-        //        RememberTilesMoved(new Vector2Int(secondTileIndex.x, secondTileIndex.y),new Vector2Int(_firstTileindex.x, _firstTileindex.y));
-               
-        //    }
-        //}
     }
 
-  
+
     public bool MoveTileDown(Tile[,] tiles, List<Vector2Int> movingDownTiles)
     {
         bool isMatched = false;
@@ -89,16 +70,12 @@ public class TileMove
             }
         }
     }
-    public List<Vector2Int> GetRememberSwapTiles()
-    {
-        return _indexMovedTiles;
-    }
+
     private void RememberTilesMoved(Vector2Int firstIndex, Vector2Int secondIndex)
     {
         _indexMovedTiles.Clear();
         _indexMovedTiles.Add(firstIndex);
         _indexMovedTiles.Add(secondIndex);
     }
-    
 }
 

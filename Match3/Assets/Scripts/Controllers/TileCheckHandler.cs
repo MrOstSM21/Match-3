@@ -47,7 +47,7 @@ public class TileCheckHandler
         {
             for (int x = 0; x < GameData.GRID_Y; x++)
             {
-                if (tiles[y, x].GetIsMark())
+                if (tiles[y, x].GetIsMark)
                 {
                     _markedTilesIndex.Add(new Vector2Int(x, y));
                 }
@@ -108,7 +108,7 @@ public class TileCheckHandler
         {
             if (item != null)
             {
-                if (item.GetTileViewIsMove())
+                if (item.GetTileViewIsMove)
                 {
                     isMove = true;
                     return isMove;
@@ -148,7 +148,7 @@ public class TileCheckHandler
         {
             for (int x = 0; x < GameData.GRID_Y; x++)
             {
-                if (_tiles[y, x].GetIsMatch())
+                if (_tiles[y, x].GetIsMatch)
                 {
                     matchedTilesIndex.Add(new Vector2Int(x, y));
                 }

@@ -7,8 +7,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ScoreView _scoreView;
 
     private GameController _gameController;
-    private int _countPush = 0;
     private GameData _gameData;
+    private int _countPush = 0;
 
     private void Start()
     {
@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     }
     private void Update()
     {
-        _gameController.HandleState();
+        _gameController.Init();
         if (Input.GetMouseButtonDown(0))
         {
             _countPush++;
