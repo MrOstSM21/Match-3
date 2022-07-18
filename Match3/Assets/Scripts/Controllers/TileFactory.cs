@@ -12,14 +12,14 @@ public class TileFactory
 {
     private readonly Dictionary<TilesName, Sprite> _sprites;
     private readonly TileView _prefab;
-    private readonly ScoreView _scoreView;
+    private readonly ScoreHandler _scoreHandler;
     private readonly GameData _gameData;
 
-    public TileFactory(Dictionary<TilesName, Sprite> sprites, TileView prefab,ScoreView scoreView,GameData gameData)
+    public TileFactory(Dictionary<TilesName, Sprite> sprites, TileView prefab,ScoreHandler scoreHandler,GameData gameData)
     {
         _sprites = sprites;
         _prefab = prefab;
-        _scoreView = scoreView;
+        _scoreHandler = scoreHandler;
         _gameData = gameData;
     }
 
@@ -27,7 +27,7 @@ public class TileFactory
     {
         var tileView = Object.Instantiate(_prefab, tilePosition, Quaternion.identity);
         tileView.Init(_sprites[tileName], tileName);
-        var tile = new Tile(tileView,_scoreView,_gameData);
+        var tile = new Tile(tileView,_scoreHandler,_gameData);
         return tile;
     }
 }

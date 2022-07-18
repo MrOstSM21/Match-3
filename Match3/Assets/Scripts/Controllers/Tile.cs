@@ -12,13 +12,13 @@ public class Tile
     public bool GetTileViewIsMove { get { return _tileView.GetIsMove; } }
 
     private readonly TileView _tileView;
-    private readonly ScoreView _scoreview;
+    private readonly ScoreHandler _scoreHandler;
     private readonly GameData _gameData;
 
-    public Tile(TileView tileView, ScoreView scoreView, GameData gameData)
+    public Tile(TileView tileView, ScoreHandler scoreHandler, GameData gameData)
     {
         _tileView = tileView;
-        _scoreview = scoreView;
+        _scoreHandler = scoreHandler;
         _gameData = gameData;
         _tileView.IsPushed += tileView_IsPushed;
         _tileView.IsDestroy += tileView_IsDestroy;
@@ -55,7 +55,7 @@ public class Tile
 
     private void tileView_IsDestroy()
     {
-        _scoreview.SetScore(_gameData.GetPoints[TilesName]);
+        _scoreHandler.ChangeScore(_gameData.GetPoints[TilesName]);
         _tileView.IsPushed -= tileView_IsPushed;
         _tileView.IsDestroy -= tileView_IsDestroy;
     }
