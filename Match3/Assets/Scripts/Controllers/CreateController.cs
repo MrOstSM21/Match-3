@@ -14,13 +14,13 @@ public class CreateController
     private Tile[,] _tiles = new Tile[GameData.GRID_X, GameData.GRID_Y];
     private int _spriteCount;
 
-    public CreateController(GameData gameData, TileSpritesView tileSpritesView, TileView tileView, ScoreView scoreView)
+    public CreateController(GameData gameData, TileSpritesView tileSpritesView, TileView tileView, ScoreHandler scoreHandler)
     {
         _gameData = gameData;
         _gridCreater = new GridCreater(_gameData);
         var sprites = tileSpritesView.GetSprites();
         _spriteCount = sprites.Count;
-        _tileFactory = new TileFactory(sprites, tileView, scoreView, _gameData);
+        _tileFactory = new TileFactory(sprites, tileView, scoreHandler, _gameData);
     }
 
     public void Init()

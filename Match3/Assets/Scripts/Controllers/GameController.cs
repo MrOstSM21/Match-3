@@ -21,6 +21,7 @@ public class GameController
     private readonly CreateController _createController;
     private readonly TileCheckHandler _checkHandler;
     private readonly TileMove _tileMove;
+    private readonly ScoreHandler _scoreHandler;
 
     private List<Vector2Int> _movingDownTiles;
     private List<Vector2Int> _markedTiles;
@@ -33,7 +34,8 @@ public class GameController
 
     public GameController(GameData gameData, TileSpritesView tileSpritesView, TileView tileView, ScoreView scoreView)
     {
-        _createController = new CreateController(gameData, tileSpritesView, tileView, scoreView);
+        _scoreHandler = new ScoreHandler(scoreView);
+        _createController = new CreateController(gameData, tileSpritesView, tileView, _scoreHandler);
         _checkHandler = new TileCheckHandler(gameData);
         _createController.Init();
         _tileMove = new TileMove(_createController.GetGridSpawnpoint);
