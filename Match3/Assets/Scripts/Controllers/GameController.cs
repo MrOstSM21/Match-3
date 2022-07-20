@@ -38,15 +38,12 @@ public class GameController
         _createController = new CreateController(gameData, tileSpritesView, tileView, _scoreHandler);
         _checkHandler = new TileCheckHandler(gameData);
         _createController.Init();
-        _tileMove = new TileMove(_createController.GetGridSpawnpoint);
+        _tileMove = new TileMove(_createController.GetGridSpawnpoint, gameData);
         _state = ControllerState.CheckMatchOnStart;
         HandleState();
     }
-    public void ChangePositionMarked()
-    {
-        _state = ControllerState.CheckMarked;
-    }
-
+    public void ChangePositionMarked()=> _state = ControllerState.CheckMarked;
+   
     public void Init()
     {
         HandleState();
@@ -59,9 +56,7 @@ public class GameController
 
                 var foundMatches = _checkHandler.CheckMatchGrid(_createController.GetTiles);
                 if (!_createController.ReplaseTileOnStart(foundMatches))
-                {
                     _state = ControllerState.Wait;
-                }
 
                 break;
 
@@ -91,7 +86,6 @@ public class GameController
                 _matchedTiles = _checkHandler.CheckMatchGrid(_createController.GetTiles);
                 if (_matchedTiles.Count != 0)
                 {
-
                     _state = ControllerState.DestroyMatched;
                     _tilesExchange = false;
                 }
@@ -195,5 +189,4 @@ public class GameController
             _loop = false;
         }
     }
-
 }

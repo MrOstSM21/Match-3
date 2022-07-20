@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
@@ -34,7 +31,6 @@ public class SaveHandler
         var data = (SaveData)_binaryFormatter.Deserialize(file);
         file.Close();
         return data;
-
     }
 }
 

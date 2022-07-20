@@ -2,9 +2,6 @@ using UnityEngine;
 
 public class Tile
 {
-    private bool _isMatch = false;
-    private bool _isMark = false;
-
     public TilesName TilesName { get { return _tileView.TilesName; } }
     public TileView View { get { return _tileView; } }
     public bool GetIsMatch { get { return _isMatch; } }
@@ -15,6 +12,9 @@ public class Tile
     private readonly ScoreHandler _scoreHandler;
     private readonly GameData _gameData;
 
+    private bool _isMatch = false;
+    private bool _isMark = false;
+
     public Tile(TileView tileView, ScoreHandler scoreHandler, GameData gameData)
     {
         _tileView = tileView;
@@ -23,19 +23,14 @@ public class Tile
         _tileView.IsPushed += tileView_IsPushed;
         _tileView.IsDestroy += tileView_IsDestroy;
     }
+    public void SetMoveTileView(Vector2 position, float speed)
+    {
+        _tileView.SetPosition(position, true, speed);
+        _isMark = false;
+    }
 
-    public void SetTileViewSwap(Vector2 position)
-    {
-        _tileView.SetPosition(position, true, _gameData.SwapTileSpeed);
-        _isMark = false;
-    }
-    public void SetTileViewMove(Vector2 position)
-    {
-        _tileView.SetPosition(position, true, _gameData.MoveTileSpeed);
-        _isMark = false;
-    }
     public void ChangeIsMatch() => _isMatch = true;
-    
+
     public void tileView_IsPushed()
     {
         if (_isMark)

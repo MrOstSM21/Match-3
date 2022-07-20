@@ -3,10 +3,10 @@ using UnityEngine;
 
 public enum TilesName
 {
-    Red,
-    Blue,
-    Green,
-    Yellow
+    Coin,
+    Meat,
+    Gem,
+    Crown
 }
 public class TileFactory
 {

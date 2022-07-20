@@ -9,20 +9,13 @@ public class TimeHandler
     public bool GameIsStop { get; private set; }
 
     private TimerView _timerView;
+
     public TimeHandler(TimerView timerView)
     {
         GameIsStop = false;
         _timerView = timerView;
         Subscribe();
         ChangeTimeScale(true);
-    }
-    private void Subscribe()
-    {
-        _timerView.TimerOff += _timerView_TimerOff;
-    }
-    private void Unsubscribe()
-    {
-        _timerView.TimerOff -= _timerView_TimerOff;
     }
 
     private void _timerView_TimerOff()
@@ -39,4 +32,7 @@ public class TimeHandler
         else
             Time.timeScale = 0;
     }
+
+    private void Subscribe() => _timerView.TimerOff += _timerView_TimerOff;
+    private void Unsubscribe() => _timerView.TimerOff -= _timerView_TimerOff;
 }

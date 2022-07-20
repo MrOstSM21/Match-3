@@ -34,7 +34,7 @@ public class CreateController
             }
         }
     }
-   
+
     public List<Tile> CreateTileOutOfScreen(List<Vector2Int> topEmptyTiles)
     {
         List<Tile> tilesOutOfScreen = new List<Tile>();
@@ -92,8 +92,5 @@ public class CreateController
         var tile = _tileFactory.CreateTile(tilePossition, (TilesName)tileName);
         return tile;
     }
-    private void CreateGrid()
-    {
-        _gridSpawnPoints = _gridCreater.CreateGridSpawnPoint();
-    }
+    private void CreateGrid() => _gridSpawnPoints = _gridCreater.CreateGridSpawnPoint();
 }

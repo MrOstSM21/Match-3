@@ -14,10 +14,10 @@ public class GameData
 
     public Dictionary<TilesName, int> GetPoints { get; } = new Dictionary<TilesName, int>()
     {
-        { TilesName.Red,1 },
-        { TilesName.Blue,1 },
-        { TilesName.Green,1 },
-        { TilesName.Yellow,1 }
+        { TilesName.Coin,1 },
+        { TilesName.Meat,1 },
+        { TilesName.Gem,1 },
+        { TilesName.Crown,1 }
 
     };
 }

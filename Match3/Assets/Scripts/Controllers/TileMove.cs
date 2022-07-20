@@ -6,6 +6,7 @@ public class TileMove
     public List<Vector2Int> GetRememberSwapTiles { get { return _indexMovedTiles; } }
 
     private readonly Vector2[,] _tilesPosition;
+    private readonly GameData _gameData;
 
     private List<Vector2Int> _indexMovedTiles = new List<Vector2Int>();
     private Vector2Int _firstTileindex;
@@ -13,9 +14,10 @@ public class TileMove
     private Tile _secondTile;
     private int count = 0;
 
-    public TileMove(Vector2[,] tilesPosition)
+    public TileMove(Vector2[,] tilesPosition, GameData gameData)
     {
         _tilesPosition = tilesPosition;
+        _gameData = gameData;
     }
     public void ChangePosition(Tile[,] tiles, List<Vector2Int> indexMarked)
     {
@@ -30,8 +32,8 @@ public class TileMove
             else
             {
                 var secondTileIndex = indexMarked[1];
-                tiles[secondTileIndex.y, secondTileIndex.x].SetTileViewSwap(_tilesPosition[_firstTileindex.y, _firstTileindex.x]);
-                _firstTile.SetTileViewSwap(_tilesPosition[secondTileIndex.y, secondTileIndex.x]);
+                tiles[secondTileIndex.y, secondTileIndex.x].SetMoveTileView(_tilesPosition[_firstTileindex.y, _firstTileindex.x],_gameData.SwapTileSpeed);
+                _firstTile.SetMoveTileView(_tilesPosition[secondTileIndex.y, secondTileIndex.x], _gameData.SwapTileSpeed);
                 _secondTile = tiles[secondTileIndex.y, secondTileIndex.x];
                 tiles[secondTileIndex.y, secondTileIndex.x] = tiles[_firstTileindex.y, _firstTileindex.x];
                 tiles[_firstTileindex.y, _firstTileindex.x] = _secondTile;
@@ -50,7 +52,7 @@ public class TileMove
         {
             if (item != null)
             {
-                tiles[item.y, item.x].SetTileViewMove(_tilesPosition[item.y, item.x - 1]);
+                tiles[item.y, item.x].SetMoveTileView(_tilesPosition[item.y, item.x - 1],_gameData.MoveTileSpeed);
                 tiles[item.y, item.x - 1] = tiles[item.y, item.x];
                 tiles[item.y, item.x] = null;
                 isMatched = true;
@@ -65,7 +67,7 @@ public class TileMove
             for (int index = 0; index < newTile.Count; index++)
             {
                 var position = _tilesPosition[topEmptyTilesIndex[index].y, topEmptyTilesIndex[index].x];
-                newTile[index].SetTileViewMove(new Vector2(position.x, position.y));
+                newTile[index].SetMoveTileView(new Vector2(position.x, position.y),_gameData.MoveTileSpeed);
                 tile[topEmptyTilesIndex[index].y, topEmptyTilesIndex[index].x] = newTile[index];
             }
         }
