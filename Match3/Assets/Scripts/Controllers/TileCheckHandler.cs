@@ -155,10 +155,8 @@ public class TileCheckHandler
             }
         }
     }
-    private void ResetMatchCount()
-    {
-        _matchCount = 0;
-    }
+    private void ResetMatchCount() => _matchCount = 0;
+        
     private bool CheckPositionMarked(List<Vector2Int> marked)
     {
         Vector2Int index = new Vector2Int(0, 0);

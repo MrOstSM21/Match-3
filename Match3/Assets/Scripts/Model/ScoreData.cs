@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class ScoreData
 {
@@ -16,12 +13,8 @@ public class ScoreData
         _bestScore = 0;
     }
 
-    public void AddScore(int points)
-    {
-        _score += points;
-    }
-    public void SetBestScore(int points)
-    {
-        _bestScore = points;
-    }
+    public void AddScore(int points)=> _score += points;
+    
+    public void SetBestScore(int points) => _bestScore = points;
+   
 }

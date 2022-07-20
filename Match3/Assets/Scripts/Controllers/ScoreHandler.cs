@@ -11,13 +11,7 @@ public class ScoreHandler
         SetStartBestScore();
         Subscribe();
     }
-    private void Subscribe()
-    {
-        TimeHandler.EndGame += TimeHandler_EndGame;
-    }private void Unsubscribe()
-    {
-        TimeHandler.EndGame -= TimeHandler_EndGame;
-    }
+
     public void ChangeScore(int points)
     {
         _scoreData.AddScore(points);
@@ -25,7 +19,7 @@ public class ScoreHandler
     }
     private void TimeHandler_EndGame()
     {
-        if (_scoreData.GetScore>_scoreData.GetBestScore)
+        if (_scoreData.GetScore > _scoreData.GetBestScore)
         {
             var saver = new SaveHandler();
             saver.Save(_scoreData.GetScore);
@@ -38,6 +32,7 @@ public class ScoreHandler
         _scoreData.SetBestScore(saver.Load()._score);
         _scoreView.SetBestScore(_scoreData.GetBestScore);
     }
+    private void Subscribe() => TimeHandler.EndGame += TimeHandler_EndGame;
+    private void Unsubscribe() => TimeHandler.EndGame -= TimeHandler_EndGame;
 
-    
 }
