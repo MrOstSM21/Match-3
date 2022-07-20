@@ -1,14 +1,22 @@
 using System.Collections;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TimerView : MonoBehaviour
 {
+    public event Action TimerOff;
+
     [SerializeField] private float time;
     [SerializeField] private Text timerText;
 
     private float _timeLeft = 0f;
 
+    private void Start()
+    {
+        _timeLeft = time;
+        StartCoroutine(StartTimer());
+    }
     private IEnumerator StartTimer()
     {
         while (_timeLeft > 0)
@@ -17,12 +25,7 @@ public class TimerView : MonoBehaviour
             UpdateTimeText();
             yield return null;
         }
-    }
-
-    private void Start()
-    {
-        _timeLeft = time;
-        StartCoroutine(StartTimer());
+        TimerOff?.Invoke();
     }
 
     private void UpdateTimeText()
