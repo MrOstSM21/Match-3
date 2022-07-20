@@ -22,7 +22,6 @@ public class Tile
         _gameData = gameData;
         _tileView.IsPushed += tileView_IsPushed;
         _tileView.IsDestroy += tileView_IsDestroy;
-
     }
 
     public void SetTileViewSwap(Vector2 position)
@@ -35,22 +34,14 @@ public class Tile
         _tileView.SetPosition(position, true, _gameData.MoveTileSpeed);
         _isMark = false;
     }
-    public void ChangeIsMatch()
-    {
-        _isMatch = true;
-    }
-
+    public void ChangeIsMatch() => _isMatch = true;
+    
     public void tileView_IsPushed()
     {
-
         if (_isMark)
-        {
             _isMark = false;
-        }
         else
-        {
             _isMark = true;
-        }
     }
 
     private void tileView_IsDestroy()
